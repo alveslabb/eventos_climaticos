@@ -8,7 +8,7 @@
     "start": "node server.js"
   },
   "keywords": [],
-  "author": "anaalvesss",
+  "author": "alveslabb",
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
