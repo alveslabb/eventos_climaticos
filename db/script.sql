@@ -1,33 +1,38 @@
-CREATE DATABASE registos_climaticos;
+drop database if exists registros_climaticos;
+create database registros_climaticos;
+use registros_climaticos;
 
-USE registos_climaticos;
-
-CREATE TABLE Usuarios (
-id INT PRIMARY KEY AUTO_INCREMENT,
-nome VARCHAR(100),
-email VARCHAR(100),
-senha VARCHAR(100)
+create table usuario (
+    id int not null auto_increment primary key,
+    nome varchar(100) not null,
+    email varchar(100) not null unique,
+    senha varchar(100) not null
 );
 
-CREATE TABLE Eventos (
-id INT PRIMARY KEY AUTO_INCREMENT,
-cidade VARCHAR(100),
-tipoEvento VARCHAR(100),
-temperaturaMaxima DECIMAL(5,2),
-data DATE,
-nivelImpacto VARCHAR(50),
-usuarioId INT,
-FOREIGN KEY (usuarioId) REFERENCES Usuarios(id)
+create table evento (
+    id int not null auto_increment primary key,
+    usuarioId int not null,
+    cidade varchar(100) not null,
+    tipoEvento varchar(100) not null,
+    temperaturaMaxima decimal(10,2) not null,
+    data date not null,
+    nivelImpacto enum('Baixo', 'Médio', 'Alto') default 'Médio' not null
 );
 
-INSERT INTO Usuarios (id, nome, email, senha) VALUES
-(1, 'Maria Oliveira', '[maria.oliveira@email.com](mailto:maria.oliveira@email.com)', 'senha123'),
-(2, 'João Silva', '[joao.silva@email.com](mailto:joao.silva@email.com)', 'senha123'),
-(3, 'Ana Souza', '[ana.souza@email.com](mailto:ana.souza@email.com)', 'senha123');
+alter table evento add
+constraint fk_registra foreign key (usuarioId) references usuario(id);
 
-INSERT INTO Eventos (id, cidade, tipoEvento, temperaturaMaxima, data, nivelImpacto, usuarioId) VALUES
-(1, 'Campinas', 'Onda de calor', 38.7, '2026-09-23', 'Alto', 1),
-(2, 'São Paulo', 'Chuva intensa', 25.3, '2026-09-24', 'Médio', 2),
-(3, 'Rio de Janeiro', 'Tempestade', 30.1, '2026-09-25', 'Alto', 1),
-(4, 'Belo Horizonte', 'Seca prolongada', 35.0, '2026-09-26', 'Alto', 2),
-(5, 'Porto Alegre', 'Nevasca', -2.5, '2026-09-27', 'Médio', 3);
+insert into usuario (nome, email, senha) values
+('Maria Oliveira', 'maria.oliveira@email.com', password('senha123')),
+('João Silva', 'joao.silva@email.com', password('senha123')),
+('Ana Souza', 'ana.souza@email.com', password('senha123'));
+
+insert into evento (usuarioId, cidade, tipoEvento, temperaturaMaxima, data, nivelImpacto) values
+(1, 'Campinas', 'Onda de calor', 38.7, '2026-09-23', 'Alto'),
+(2, 'São Paulo', 'Chuva intensa', 25.3, '2026-09-24', 'Médio'),
+(1, 'Rio de Janeiro', 'Tempestade', 30.1, '2026-09-25', 'Alto'),
+(2, 'Belo Horizonte', 'Seca prolongada', 35.0, '2026-09-26', 'Alto'),
+(3, 'Porto Alegre', 'Nevasca', -2.5, '2026-09-27', 'Médio');
+
+select * from usuario;
+select * from evento;
